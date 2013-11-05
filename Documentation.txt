@@ -1,0 +1,9 @@
+Documentation
+
+HashPipe is a forensics tool that allows the user to capture information regarding the system that they are analyzing.  The user will be able to capture current system information, image drives, image memory and hash all images.
+
+HashPipe is written in Perl but wil consist of mainly Linux based commands that perform the vast majority of this program's functionality.  
+
+To start, the user will be prompted to enter a name of their project.  This will allow all for the information that they capture henceforth for the duration of that session to be stored in a folder for organizational purposes.  It will also make sure that all images, hashes and information are stored in the same place.
+
+Following the creation of their project, the user will have the opportunity to perform any of the aforementioned tasks.  Upon completion, the information or hash obtained by each function will be output into a text file and automatically stored in the project folder created at the start.
