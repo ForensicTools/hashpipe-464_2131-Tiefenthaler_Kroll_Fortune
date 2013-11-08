@@ -43,22 +43,25 @@ sub imgDrive() {
 
 
 #function to collect current system data
-#includes ifconfig, netstat, top, ps
-#either single bash script or run system or `` commands
-
+#includes the commands ps, ifconfig, netstat, and top
+#these commands store their output in files in the projects folder created earlier
 sub current() {
-	my $psFile = "psOutput.txt";
-	my $psCommand = "ps -ef > '$workingDir/$psFile'";
+
+	#creates a file and runs the ps command
+	my $psCommand = "ps -ef > $workingDir/psOutput.txt";
 	system($psCommand);
 	
-	my $ifFile = "ifconfigOutput.txt";
-	my $ifCommand = "ifconfig > '$workingDir/$ifFile'";
+	#creates a file and runs the ifconfig command
+	my $ifCommand = "ifconfig > $workingDir/ifconfigOutput.txt";
 	system($ifCommand);
 	
-	my $temp = "netstatOutput.txt";
-	my $netFile = "$workingDir/$temp";
-	my $netCommand = "netstat -an > $netFile";
+	#creates a file and runs the netstat command
+	my $netCommand = "netstat -an > $workingDir/netstatOutput.txt";
 	system($netCommand);
+	
+	#creates a file and runs the top command
+	my $topCommand = "top -b -n 1 > $workingDir/topOutput.txt";
+	system($topCommand);
 }
 	
 	
