@@ -3,10 +3,6 @@ use strict;
 use warnings;
 
 
-#open files here
-#create new directory to put current working files into
-
-
 #asks user for input to what new folder is going to be called
 print "Please enter the name of this project: ";
 my $folder = <STDIN>;
@@ -23,23 +19,48 @@ my $workingDir = "$directory/$folder";
 
 
 #function to capture images of hdd's
-#use dd for this, make sure to exclude the removable media
-
 sub imgDrive() {
+
+	#prints output from mount command for user reference
+	print "Mount Points: \n\n";
+	my $output = `mount`;
+	print "$output\n";
 	
-#	my $command = 
+	#asks user what drive to image
+	print "Please enter the full path name of the drive you would like to image: ";
+	my $drive = <STDIN>;
+	chomp $drive;
+	
+	#images drive
+	my $imgDrive = "dd if=$drive of=$workingDir$drive\.dd conv=sync,noerror";
+	system($imgDrive);
 }
 
 #function to copy memory
-#use dd for this
+sub copyMem() {
+
+	my $ddMem = "dd /dev/mem $workingDir/Mem.dd conv=sync,noerror";
+	system($ddMem);
+	
+	my $hashMem = "md5sum $workingDir/memory.dd >> $workingDir/hashes.txt";
+	system($hashMem);
+	
+	my $ddKMem = "dd /dev/kmem $workingDir/KMem.dd conv=sync,noerror";
+	system($ddKMem);
+	
+	my $hashKMem = "md5sum $workingDir/KMem.dd >> $workingDir/hashes.txt";
+	system($hashKMem);
+}
 
 
 
 #function to copy logs over
-#probably use something like cp or tail all of the logs over to removable media?
+sub copyLogs() {
 
-#cp -r /var/log $workingDir
-
+	#creates a file and runs the cp command
+	my $cpCommand = "cp -r /var/log $workingDir/logs";
+	system($cpCommand);
+}
 
 
 #function to collect current system data
@@ -73,7 +94,6 @@ while () {
 
 	#GUI options
 	print "Welcome to HashPipe\n\n";
-	print "LEGAL DISCLAIMER HERE!\n\n";
 	print "Please select from the following options below:\n";
 	print "1) Image and Hash Local Drives\n";
 	print "2) Image and Hash Memory\n";
@@ -84,22 +104,25 @@ while () {
 	print "Please input a menu selection (Number Only): ";
 	
 	#takes input from keyboard
-	my $input = <STDIN>;
+	my $input = <STDIN>;  
 	chomp $input;
 
 	#Checks if valid input, otherwise asks user for a valid input
 	if($input > 0 && $input < 7) {
+		print "\n\n";
 		if ($input == 1) {
 			#Runs the image/hash on local drives function
-			imgDrive();
+			imgDrive()
 		}
 
 		if ($input == 2) {
 			#Runs the image/hash on memory function
+			copyMem();
 		}
 
 		if ($input == 3) {
 			#Copies the log files to the directory
+			copyLogs();
 		}
 
 		if ($input == 4) {
@@ -109,6 +132,10 @@ while () {
 
 		if ($input == 5) {
 			#DO ALL THE THINGS
+			imgDrive();
+			copyMem();
+			copyLogs();
+			current();
 		}
 
 		if ($input == 6) {
