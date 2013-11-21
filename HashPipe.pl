@@ -27,20 +27,20 @@ sub imgDrive() {
 	print "$output\n";
 	
 	#asks user what drive to image
-	print "Please enter the full path name of the drive you would like to image: ";
+	print "Please enter the name of the drive you would like to image (eg sda1, sdb1): ";
 	my $drive = <STDIN>;
 	chomp $drive;
 	
 	#images drive
-	my $imgDrive = "dd if=$drive of=$workingDir$drive\.dd conv=sync,noerror";
+	my $imgDrive = "dd if=/dev/$drive of=$workingDir/$drive\.dd conv=sync,noerror";
 	system($imgDrive);
 	
 	#hashes original drive and stores the hash
-	my $hashOrig = "md5sum $drive >> $workingDir/hashes.txt";
+	my $hashOrig = "md5sum /dev/$drive >> $workingDir/hashes.txt";
 	system($hashOrig);
 	
 	#hashes image and stores the hash
-	my $hashImg = "md5sum $workingDir$drive\.dd >> $workingDir/hashes.txt";
+	my $hashImg = "md5sum $workingDir/$drive\.dd >> $workingDir/hashes.txt";
 	system($hashImg);
 }
 
@@ -48,15 +48,15 @@ sub imgDrive() {
 sub copyMem() {
 
 	#images memory (only works if not blocked by kernel
-	my $ddMem = "dd /dev/mem $workingDir/Mem.dd conv=sync,noerror";
+	my $ddMem = "dd if=/dev/mem of=$workingDir/Mem.dd conv=sync,noerror";
 	system($ddMem);
 	
 	#hashes the memory image
-	my $hashMem = "md5sum $workingDir/memory.dd >> $workingDir/hashes.txt";
+	my $hashMem = "md5sum $workingDir/Mem.dd >> $workingDir/hashes.txt";
 	system($hashMem);
 	
 	#images kernel memory (only works if not blocked by kernel)
-	my $ddKMem = "dd /dev/kmem $workingDir/KMem.dd conv=sync,noerror";
+	my $ddKMem = "dd if=/dev/kmem of=$workingDir/KMem.dd conv=sync,noerror";
 	system($ddKMem);
 	
 	#hashes the kernel memory image
