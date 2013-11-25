@@ -105,6 +105,7 @@ while () {
 
 	#GUI options
 	print "\nWelcome to HashPipe\n\n";
+	print "Legal Disclaimer:\nHashPipe is intended for individual and corporate use alike.  The scope of\nHashPipe use is limited to that which is listed in the menu options and shall\nnot under any circumstances be implemented with malicious intent.  All HashPipe\nuse is the responsibility of the user and the user alone and HashPipe accepts\nno responsibility for any harm accidental or otherwise caused to any individual\nor machine.  For further information regarding HashPipe policies and terms\nof use, please consult the HashPipe Legal Advisory Team or check the End User License\nAgreement for additional details.\n\n";
 	print "Please select from the following options below:\n";
 	print "1) Image and Hash Local Drives\n";
 	print "2) Image and Hash Memory\n";
