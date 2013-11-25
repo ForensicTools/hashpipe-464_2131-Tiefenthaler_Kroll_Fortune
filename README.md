@@ -33,7 +33,7 @@ NOTE: Other Linux versions then the above are likely to work correctly, but they
 
 ##Installation instructions
 
-See file Doc/Installation.txt. An installer script exists to do most of the work with minor configuration.
+Download 'HashPipe.pl' and run the script. No installer is necessary to run the program.
 
 
 ##Stuff

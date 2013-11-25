@@ -2,8 +2,21 @@ Documentation
 
 HashPipe is a forensics tool that allows the user to capture information regarding the system that they are analyzing.  The user will be able to capture current system information, image drives, image memory and hash all images.
 
-HashPipe is written in Perl but wil consist of mainly Linux based commands that perform the vast majority of this program's functionality.  
+HashPipe is written in Perl but will consist of mainly Linux based commands that perform the vast majority of this program's functionality.  
 
-To start, the user will be prompted to enter a name of their project.  This will allow all for the information that they capture henceforth for the duration of that session to be stored in a folder for organizational purposes.  It will also make sure that all images, hashes and information are stored in the same place.
+To start, the user will be prompted to enter a name of their project. The name of the project will be created as a sub-folder under the present working directory. This will allow for all the information that they capture for the duration of that session to be stored in a folder for organizational purposes.  It will also make sure that all images, hashes and information are stored in the same place.
 
 Following the creation of their project, the user will have the opportunity to perform any of the aforementioned tasks.  Upon completion, the information or hash obtained by each function will be output into a text file and automatically stored in the project folder created at the start.
+
+The options listed below are available to the user:
+1 - Image and Hash Local Drives
+2 - Image and Hash Memory
+3 - Copy Log Files: Copy logs within “/var/log” into the working directory for user’s project
+4 - Capture Current System Statistics: System information regarding running processes, ip stack configuration and netstat details
+5 - Do all of the above: Runs each of the functions above one after the next
+6 - Quit
+
+With HashPipe a user should be able to image the local drives/memory of a live system, copy its important information, hash it for integrity purposes and analyze it later - all without much effort. It should be of great value especially to those wanting to do their own personal projects/forensics learning. We look forward to seeing its use within the Open Source community.
+
+For any questions/concerns, or interest in using the code for this project please see appropriate contact information in the “README.md” file.
+
