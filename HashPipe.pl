@@ -17,7 +17,6 @@ system($newDir);
 #absolute path to the folder that was just created
 my $workingDir = "$directory/$folder";
 
-
 #function to capture images of hdd's
 sub imgDrive() {
 
@@ -30,6 +29,10 @@ sub imgDrive() {
 	print "Please enter the name of the drive you would like to image (eg sda1, sdb1): ";
 	my $drive = <STDIN>;
 	chomp $drive;
+
+	#reopens stdout and stderr or kills the program
+	open STDOUT, '>', \$stdout or die "Can't open STDOUT: $!";
+	open STDERR, '>', \$stderr or die "Can't open STDERR: $!";
 	
 	#images drive
 	my $imgDrive = "dd if=/dev/$drive of=$workingDir/$drive\.dd conv=sync,noerror";
@@ -38,23 +41,39 @@ sub imgDrive() {
 	#hashes original drive and stores the hash
 	my $hashOrig = "md5sum /dev/$drive >> $workingDir/hashes.txt";
 	system($hashOrig);
-	
+
 	#hashes image and stores the hash
 	my $hashImg = "md5sum $workingDir/$drive\.dd >> $workingDir/hashes.txt";
 	system($hashImg);
+
+	#takes stdout and outputs it to a log file
+	$printStdout = "cat 'Hashing Function:\n$stdout\n' >> $workdingDir/OutputLog.txt";
+	system($printStdout);
+
+	#copies the output from stderr and writes it to the ErrorLog.txt file
+        $printStderr = "cat 'Hashing Function:\n$stderr\n' >> $workdingDir/ErrorLog.txt";
+        system($printStderr);
+
+	#closes stdout and stderr
+	close STDOUT;
+	close STDERR;
 }
 
 #function to copy memory
 sub copyMem() {
 
+	#reopens stdout and stderr or kills the program
+        open STDOUT, '>', \$stdout or die "Can't open STDOUT: $!";
+        open STDERR, '>', \$stderr or die "Can't open STDERR: $!";
+
 	#images memory (only works if not blocked by kernel
 	my $ddMem = "dd if=/dev/mem of=$workingDir/Mem.dd conv=sync,noerror";
 	system($ddMem);
-	
+
 	#hashes the memory image
 	my $hashMem = "md5sum $workingDir/Mem.dd >> $workingDir/hashes.txt";
 	system($hashMem);
-	
+
 	#images kernel memory (only works if not blocked by kernel)
 	my $ddKMem = "dd if=/dev/kmem of=$workingDir/KMem.dd conv=sync,noerror";
 	system($ddKMem);
@@ -62,15 +81,34 @@ sub copyMem() {
 	#hashes the kernel memory image
 	my $hashKMem = "md5sum $workingDir/KMem.dd >> $workingDir/hashes.txt";
 	system($hashKMem);
+
+	#takes stdout and outputs it to a log file
+        $printStdout = "cat 'Memory Function:\n$stdout\n' >> $workdingDir/OutputLog.txt";
+        system($printStdout);
+
+        #copies the output from stderr and writes it to the ErrorLog.txt file
+        $printStderr = "cat 'Memory Function:\n$stderr\n' >> $workdingDir/ErrorLog.txt";
+        system($printStderr);
+
+	close STDOUT;
+	close STDERR;
 }
 
 
 #function to copy logs over
 sub copyLogs() {
 
+	open STDERR, '>', \$stderr or die "Can't open STDERR: $!";
+
 	#creates a file and runs the cp command
 	my $cpCommand = "cp -r /var/log $workingDir/logs";
 	system($cpCommand);
+
+	#copies the output from stderr and writes it to the ErrorLog.txt file
+        $printStderr = "cat 'Log Copying Function:\n$stderr\n' >> $workdingDir/ErrorLog.txt";
+        system($printStderr);
+
+	close STDERR;
 }
 
 
@@ -78,6 +116,8 @@ sub copyLogs() {
 #includes the commands ps, ifconfig, netstat, and top
 #these commands store their output in files in the projects folder created earlier
 sub current() {
+
+	open STDERR, '>', \$stderr or die "Can't open STDERR: $!";
 
 	#creates a file and runs the ps command
 	my $psCommand = "ps -ef > $workingDir/psOutput.txt";
@@ -94,6 +134,13 @@ sub current() {
 	#creates a file and runs the top command
 	my $topCommand = "top -b -n 1 > $workingDir/topOutput.txt";
 	system($topCommand);
+
+        #copies the output from stderr and writes it to the ErrorLog.txt file
+        $printStderr = "cat 'Current System Statistics Function:\n$stderr\n' >> $workdingDir/ErrorLog.txt";
+        system($printStderr);
+
+        close STDERR;
+
 }
 	
 	
@@ -159,3 +206,4 @@ while () {
 		print "\nInvalid menu selection. Please select a valid menu option.\n\n";
 	}
 }
+
